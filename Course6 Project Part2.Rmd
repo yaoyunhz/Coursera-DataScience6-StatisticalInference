@@ -1,0 +1,58 @@
+---
+title: "Course 6 Project Part 2"
+author: "Yun Yao"
+date: "April 1, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Part 2: Basic Inferential Data Analysis
+
+In the second portion of the project, I analyzed the ToothGrowth data in the R `dataset` package.
+
+
+**1. Load the ToothGrowth data and perform some basic exploratory data analyses.**
+
+The data set `ToothGrowth` has `r ncol(ToothGrowth)` variables and `r nrow(ToothGrowth)` observations.
+
+```{r data}
+library(datasets)
+dim(ToothGrowth)
+str(ToothGrowth)
+head(ToothGrowth)
+```
+
+
+**2. Provide a basic summary of the data.**
+
+``` {r summary}
+summary(ToothGrowth)
+```
+
+
+**3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose.**
+
+The null hypothesis is that there is no effect of supp and does on the growth of teeth. A linear regression model was performed, with tooth growth and the dependent variable, and supp and dose as the independent variables.
+
+The output of the model shows that both supp and dose were significant predictors on the growth of teeth. The null hypothesis was rejected.
+
+```{r hypothesis}
+model <- lm(len ~ supp + dose, data = ToothGrowth)
+summary(model)
+
+```
+
+```{r hypothesis2}
+```
+
+
+**4. State your conclusions and the assumptions needed for your conclusions.**
+
+The analysis above shows that both supp and does had significant effect on the growth of teeth. Specifically, teeth grew longer under OJ compared with VC, and the higher the dosage, the larger the growth. 
+
+The assumption for these conclusions are: (1) the relationship between the independent and dependent variables is linear, (2) the variables are normally distributed, and (3) there is little or no multicollinearity in the data.
+
+

@@ -1,0 +1,54 @@
+---
+title: "Course 6 Project: Statistical Inference (Part 1)"
+author: "Yun Yao"
+date: "April 1, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Part 1: Simulation Exercise
+
+In this project I investigated the exponential distribution in R and compared it with the Central Limit Theorem. The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda. 
+
+In this project, lambda was set to 0.2 for all of the simulations. I investigated the distribution of averages of 40 exponentials with a thousand simulations. 
+
+The first step is to simulate the means of 40 exponentials a thousand times.
+
+```{r simulation}
+set.seed(123456)
+lambda <- 0.2
+count <- 1000
+n <- 40
+simulations <- matrix(rexp(count*n, rate = lambda), count, n)
+means <- rowMeans(simulations)
+variance <- var(means)
+```
+    
+Now that the means of the 40 exponentials were simulated for a thousand times, let's take a look at the distribution of the sample means and variance and how they compare to the theoretical means and variance.
+
+As shown in the plot below, the simulated means are centered around `r mean(means)`, whereas the theoretical means are centered around `r 1/lambda`. The simulated variance is `r var(means)`, and the theoretical variance is `r 1/(0.04 * 40)`.
+
+```{r means}
+# histogram of sample means
+hist(means, breaks = 30, prob = TRUE, 
+     main = "Distribution of Means (Exponential Distribution, lambda = 0.2)",
+     ylab = "Density", xlab = "Means", cex.main = 1)
+lines(density(means))
+abline(v = 1/lambda, col = "red")
+
+# histrogram of theoretical means
+x <- seq(min(means), max(means), length = 100)
+y <- dnorm(x, mean = 1/lambda, sd = (1/lambda/sqrt(n)))
+lines(x, y, pch = 25, col = "red", lty = 2)
+legend('topright', c("Simulated", "Theoretical"), 
+       lty = c(1,2), col = c("black", "red"))
+```
+
+As for distribution, the Q-Q plot below shows that the simulated means follow a normal distribution, as predicted by the Central Limit Theorem.
+
+```{r distribution}
+qqnorm(means)
+```
